@@ -2,17 +2,33 @@
 #include <windows.h>
 
 void printArr(double *arr, int size){
-    printf("\nArray: ");
-    for(int i=0;i<size;i++){
-        printf("%g, ",arr[i]);
-    }
+    printf("Array: ");
+    for(int i=0;i<size;i++) printf("%g ",arr[i]);
+    printf("\n");
 }
 void createArr(double *arr, int size){
-    printf("Введіть значення масиву:\n");
-
-    for(int i=0;i<size;i++){
+    float a;
+    int isDublicate = 0;
+    printf("Введіть значення масиву:\narr[0]: ");
+    scanf("%f", &a);
+    arr[0]=a;
+    for(int i=1;i<size;){
         printf("arr[%d]: ",i);
-        scanf("%lf", &arr[i]);
+        scanf("%f", &a);
+
+        for(int j=0;j<i;j++){
+            if(arr[j]==a){
+                printf("Елементи повторюються!\n");
+                isDublicate=1;
+                break;
+            }else{
+                isDublicate=0;
+            }
+        }
+        if(!isDublicate){
+            arr[i]=a;
+            i++;
+        }
     }
 }
 void changeMinMax(double *arr, double *arr2, int size){
@@ -32,8 +48,32 @@ void changeMinMax(double *arr, double *arr2, int size){
             arr2[i]=arr[maxIndex];
         }  
     }
-    printf("\nmax index: %d, min index: %d", maxIndex, minIndex);
+    printf("max index: %d, min index: %d\n", maxIndex, minIndex);
 }
+void changeKindex(double *arr, double *arr2, int size){
+    int kIndex, minIndex=0;
+    do{
+        printf("Введіть k-ий елемент: ");
+        scanf("%d", &kIndex);
+    }while(kIndex>=size || kIndex<0);
+
+    for(int i=0;i<size;i++){
+        if (arr[minIndex]>arr[i]){
+            minIndex = i;
+        }
+    }
+    
+    for(int i=0;i<size;i++){
+        if(i==kIndex){
+            arr2[i] = arr[minIndex];
+        }else if (i==minIndex){
+            arr2[i] = arr[kIndex];
+        }else{
+            arr2[i]=arr[i];
+        }
+    }
+}
+
 int main(){
 
     SetConsoleOutputCP(CP_UTF8);
@@ -44,10 +84,13 @@ int main(){
         scanf("%d", &n);
     }while (n<=0);
 
-    double arr[n], arr2[n];
+    double arr[n], arr2[n], arr3[n];
     createArr(arr, n);
     printArr(arr, n);
     changeMinMax(arr, arr2, n);
     printArr(arr2, n);
+
+    changeKindex(arr, arr3, n);
+    printArr(arr3, n);
     return 0;
 }
